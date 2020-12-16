@@ -40,6 +40,7 @@ func (b *Boid) calcAcceleration() Vector2D {
 	upper, lower := b.position.AddV(viewRadius), b.position.AddV(-viewRadius)
 	avgPosition := Vector2D{0, 0}
 	avgVelocity := Vector2D{0, 0}
+	separation := Vector2D{0, 0}
 	count := 0.0
 
 	rWlock.RLock()
@@ -50,6 +51,7 @@ func (b *Boid) calcAcceleration() Vector2D {
 					count++
 					avgVelocity = avgVelocity.Add(boids[otherBoidId].velocity)
 					avgPosition = avgPosition.Add(boids[otherBoidId].position)
+					separation = separation.Add(b.position.Subtract(boids[otherBoidId].position).DivisionV(dist))
 				}
 			}
 		}
@@ -62,7 +64,8 @@ func (b *Boid) calcAcceleration() Vector2D {
 		avgVelocity = avgVelocity.DivisionV(count)
 		accelAlignment := avgVelocity.Subtract(b.velocity).MultiplyV(adjRate)
 		accelCohesion := avgPosition.Subtract(b.position).MultiplyV(adjRate)
-		accel = accel.Add(accelAlignment).Add(accelCohesion)
+		accelSeparation := separation.MultiplyV(adjRate)
+		accel = accel.Add(accelAlignment).Add(accelCohesion).Add(accelSeparation)
 	}
 	return accel
 }
