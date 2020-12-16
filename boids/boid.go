@@ -19,13 +19,6 @@ func (b *Boid) moveOne() {
 	boidMap[int(b.position.x)][int(b.position.y)] = -1
 	b.position = b.position.Add(b.velocity)
 	boidMap[int(b.position.x)][int(b.position.y)] = b.id
-	//next := b.position.Add(b.velocity)
-	//if next.x >= screenWidth || next.x < 0 {
-	//	b.velocity = Vector2D{-b.velocity.x, b.velocity.y}
-	//}
-	//if next.y >= screenHeight || next.y < 0 {
-	//	b.velocity = Vector2D{b.velocity.x, -b.velocity.y}
-	//}
 	rWlock.Unlock()
 }
 
