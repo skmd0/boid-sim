@@ -38,6 +38,7 @@ func (b *Boid) calcAcceleration() Vector2D {
 	avgVelocity := Vector2D{0, 0}
 	count := 0.0
 
+	rWlock.Lock()
 	for i := math.Max(lower.x, 0); i <= math.Min(upper.x, screenWidth); i++ {
 		for j := math.Max(lower.y, 0); j <= math.Min(upper.y, screenHeight); j++ {
 			if otherBoidId := boidMap[int(i)][int(j)]; otherBoidId != -1 && otherBoidId != b.id {
@@ -48,6 +49,8 @@ func (b *Boid) calcAcceleration() Vector2D {
 			}
 		}
 	}
+	rWlock.Unlock()
+
 	accel := Vector2D{0, 0}
 	if count > 0 {
 		avgVelocity = avgVelocity.DivisionV(count)
