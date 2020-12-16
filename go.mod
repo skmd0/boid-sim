@@ -1,1 +1,3 @@
-module "boid-sim"
+module boid-sim
+
+go 1.15
